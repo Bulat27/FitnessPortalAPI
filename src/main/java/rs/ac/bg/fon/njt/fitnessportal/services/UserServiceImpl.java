@@ -41,6 +41,7 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
+    @Transactional
     public UserGetDto create(UserPostDto userPostDto, List<ApplicationUserRole> roleTypes) {
         if(userRepository.existsByEmail(userPostDto.getEmail())) throw new EmailExistsException(userPostDto.getEmail());
 
@@ -51,7 +52,9 @@ public class UserServiceImpl implements UserService{
         return userMapper.userToUserGetDto(user);
     }
 
+
     @Override
+    @Transactional
     public UserGetDto update(UserPutDto userPutDto){
         if(userPutDto.getEmail().equals(initialAdminConfig.getEmail())) throw new AdminCannotBeModifiedException();
 

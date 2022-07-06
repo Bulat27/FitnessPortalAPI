@@ -9,7 +9,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
-import rs.ac.bg.fon.njt.fitnessportal.exception_handling.RequestStreamException;
 
 import javax.crypto.SecretKey;
 import javax.servlet.FilterChain;

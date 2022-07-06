@@ -28,18 +28,22 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     private final SecretKey secretKey;
     private final JwtConfig jwtConfig;
     private final UserDetailsService userDetailsService;
+    private final AuthEntryPointJwt unauthorizedHandler;
 
     @Autowired
-    public SecurityConfiguration( SecretKey secretKey, JwtConfig jwtConfig, UserDetailsService userDetailsService){
+    public SecurityConfiguration(SecretKey secretKey, JwtConfig jwtConfig, UserDetailsService userDetailsService, AuthEntryPointJwt unauthorizedHandler){
         this.secretKey = secretKey;
         this.jwtConfig = jwtConfig;
         this.userDetailsService = userDetailsService;
+        this.unauthorizedHandler = unauthorizedHandler;
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .csrf().disable()
+                .exceptionHandling().authenticationEntryPoint(unauthorizedHandler)
+                .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .addFilter(getJwtAuthenticationFilter())

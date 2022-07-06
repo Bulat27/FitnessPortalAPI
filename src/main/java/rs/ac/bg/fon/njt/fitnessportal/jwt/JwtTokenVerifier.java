@@ -9,6 +9,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
+import rs.ac.bg.fon.njt.fitnessportal.exception_handling.RequestStreamException;
 
 import javax.crypto.SecretKey;
 import javax.servlet.FilterChain;
@@ -61,7 +62,7 @@ public class JwtTokenVerifier extends OncePerRequestFilter {
             Authentication authentication =  new UsernamePasswordAuthenticationToken(userName, null, simpleGrantedAuthorities);
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
-        } catch (JwtException e) { }
+        } catch (JwtException e) {}
         filterChain.doFilter(request, response);
     }
 }

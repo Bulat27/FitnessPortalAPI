@@ -62,4 +62,14 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
         ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, "Arguments are not valid", errors);
         return handleExceptionInternal(ex, apiError, headers, apiError.getStatus(), request);
     }
+
+    @ExceptionHandler({InvalidBlogException.class})
+    public ResponseEntity<Object> handleInvalidBlogException(InvalidBlogException ex, WebRequest request){
+        return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(), HttpStatus.FORBIDDEN, request);
+    }
+
+    @ExceptionHandler({BlogNotFoundException.class})
+    public ResponseEntity<Object> handleBlogNotFoundException(BlogNotFoundException ex, WebRequest request){
+        return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(), HttpStatus.NOT_FOUND, request);
+    }
 }

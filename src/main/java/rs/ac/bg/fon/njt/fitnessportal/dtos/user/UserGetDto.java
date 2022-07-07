@@ -1,4 +1,4 @@
-package rs.ac.bg.fon.njt.fitnessportal.dtos;
+package rs.ac.bg.fon.njt.fitnessportal.dtos.user;
 
 public class UserGetDto {
 

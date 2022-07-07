@@ -5,9 +5,9 @@ import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.springframework.stereotype.Component;
-import rs.ac.bg.fon.njt.fitnessportal.dtos.UserGetDto;
-import rs.ac.bg.fon.njt.fitnessportal.dtos.UserPostDto;
-import rs.ac.bg.fon.njt.fitnessportal.dtos.UserPutDto;
+import rs.ac.bg.fon.njt.fitnessportal.dtos.user.UserGetDto;
+import rs.ac.bg.fon.njt.fitnessportal.dtos.user.UserPostDto;
+import rs.ac.bg.fon.njt.fitnessportal.dtos.user.UserPutDto;
 import rs.ac.bg.fon.njt.fitnessportal.entities.User;
 import rs.ac.bg.fon.njt.fitnessportal.security.authentication.MyUserDetails;
 

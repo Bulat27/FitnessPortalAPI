@@ -3,7 +3,7 @@ package rs.ac.bg.fon.njt.fitnessportal.security.configuration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
-import rs.ac.bg.fon.njt.fitnessportal.dtos.UserPostDto;
+import rs.ac.bg.fon.njt.fitnessportal.dtos.user.UserPostDto;
 import rs.ac.bg.fon.njt.fitnessportal.entities.Role;
 import rs.ac.bg.fon.njt.fitnessportal.repositories.RoleRepository;
 import rs.ac.bg.fon.njt.fitnessportal.repositories.UserRepository;

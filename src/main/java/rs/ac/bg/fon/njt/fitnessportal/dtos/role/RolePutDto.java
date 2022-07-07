@@ -1,4 +1,4 @@
-package rs.ac.bg.fon.njt.fitnessportal.dtos;
+package rs.ac.bg.fon.njt.fitnessportal.dtos.role;
 
 import rs.ac.bg.fon.njt.fitnessportal.security.authorization.ApplicationUserRole;
 

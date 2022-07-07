@@ -1,9 +1,9 @@
 package rs.ac.bg.fon.njt.fitnessportal.services;
 
 import org.springframework.stereotype.Service;
-import rs.ac.bg.fon.njt.fitnessportal.dtos.UserGetDto;
-import rs.ac.bg.fon.njt.fitnessportal.dtos.UserPostDto;
-import rs.ac.bg.fon.njt.fitnessportal.dtos.UserPutDto;
+import rs.ac.bg.fon.njt.fitnessportal.dtos.user.UserGetDto;
+import rs.ac.bg.fon.njt.fitnessportal.dtos.user.UserPostDto;
+import rs.ac.bg.fon.njt.fitnessportal.dtos.user.UserPutDto;
 import rs.ac.bg.fon.njt.fitnessportal.security.authorization.ApplicationUserRole;
 
 import java.util.List;

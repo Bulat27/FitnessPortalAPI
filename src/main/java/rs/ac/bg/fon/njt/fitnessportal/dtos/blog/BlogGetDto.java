@@ -1,34 +1,20 @@
-package rs.ac.bg.fon.njt.fitnessportal.entities;
+package rs.ac.bg.fon.njt.fitnessportal.dtos.blog;
 
-import javax.persistence.*;
+import rs.ac.bg.fon.njt.fitnessportal.dtos.user.UserGetDto;
+import rs.ac.bg.fon.njt.fitnessportal.entities.BlogType;
 
-@Entity(name = "blogs")
-public class Blog {
+public class BlogGetDto {
 
-    @Id
-    @GeneratedValue
     private Integer id;
-
-    @Column(nullable = false)
     private String title;
-
-    @Column(nullable = false, columnDefinition = "TEXT")
     private String text;
-
-    @Column(nullable = false)
     private String imageSrc;
-
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
     private BlogType type;
+    private UserGetDto user;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    public BlogGetDto() { }
 
-    public Blog() { }
-
-    public Blog(Integer id, String title, String text, String imageSrc, BlogType type, User user) {
+    public BlogGetDto(Integer id, String title, String text, String imageSrc, BlogType type, UserGetDto user) {
         this.id = id;
         this.title = title;
         this.text = text;
@@ -61,20 +47,20 @@ public class Blog {
         this.text = text;
     }
 
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
     public BlogType getType() {
         return type;
     }
 
     public void setType(BlogType type) {
         this.type = type;
+    }
+
+    public UserGetDto getUser() {
+        return user;
+    }
+
+    public void setUser(UserGetDto user) {
+        this.user = user;
     }
 
     public String getImageSrc() {

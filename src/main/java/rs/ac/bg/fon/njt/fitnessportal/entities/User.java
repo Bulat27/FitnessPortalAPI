@@ -5,6 +5,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity(name = "users")
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "user_type")
 public class User {
 
     @Id

@@ -7,7 +7,7 @@ import javax.persistence.OneToMany;
 import java.util.Set;
 
 @Entity
-@DiscriminatorValue("C")
+@DiscriminatorValue("Coach")
 public class Coach extends User {
 
     private Integer yearsOfExperience;

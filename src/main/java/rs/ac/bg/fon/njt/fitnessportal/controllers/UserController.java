@@ -37,7 +37,7 @@ public class UserController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping
     public ResponseEntity<UserGetDto> create(@RequestBody @Valid UserPostDto userPostDto){
-        return ResponseEntity.ok(userService.create(userPostDto, List.of(ApplicationUserRole.ADMIN,ApplicationUserRole.USER)));
+        return ResponseEntity.ok(userService.create(userPostDto, List.of(ApplicationUserRole.ADMIN)));
     }
 
     @PutMapping
@@ -56,11 +56,6 @@ public class UserController {
 
         userService.delete(email);
         return ResponseEntity.ok().build();
-    }
-
-    @PostMapping("/register")
-    public ResponseEntity<UserGetDto> signUp(@RequestBody @Valid UserPostDto userPostDto){
-        return ResponseEntity.ok(userService.create(userPostDto, List.of(ApplicationUserRole.USER)));
     }
 
     private boolean isAdmin(Authentication auth){

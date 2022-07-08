@@ -1,22 +1,20 @@
 package rs.ac.bg.fon.njt.fitnessportal.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import rs.ac.bg.fon.njt.fitnessportal.dtos.user.UserGetDto;
 import rs.ac.bg.fon.njt.fitnessportal.dtos.user.UserPostDto;
 import rs.ac.bg.fon.njt.fitnessportal.dtos.user.UserPutDto;
-import rs.ac.bg.fon.njt.fitnessportal.entities.Role;
 import rs.ac.bg.fon.njt.fitnessportal.entities.User;
 import rs.ac.bg.fon.njt.fitnessportal.exception_handling.AdminCannotBeModifiedException;
 import rs.ac.bg.fon.njt.fitnessportal.exception_handling.EmailExistsException;
 import rs.ac.bg.fon.njt.fitnessportal.exception_handling.UserNotFoundException;
 import rs.ac.bg.fon.njt.fitnessportal.mapstruct.mappers.UserMapper;
-import rs.ac.bg.fon.njt.fitnessportal.repositories.RoleRepository;
 import rs.ac.bg.fon.njt.fitnessportal.repositories.UserRepository;
 import rs.ac.bg.fon.njt.fitnessportal.security.authorization.ApplicationUserRole;
 import rs.ac.bg.fon.njt.fitnessportal.security.configuration.InitialAdminConfiguration;
+import rs.ac.bg.fon.njt.fitnessportal.services.utility.UserConfigurer;
 
 import java.util.List;
 
@@ -25,9 +23,8 @@ public class UserServiceImpl implements UserService{
 
     private UserRepository userRepository;
     private UserMapper userMapper;
-    private PasswordEncoder passwordEncoder;
-    private RoleRepository roleRepository;
     private InitialAdminConfiguration initialAdminConfig;
+    private UserConfigurer userConfigurer;
 
     @Override
     public List<UserGetDto> get() {
@@ -46,12 +43,12 @@ public class UserServiceImpl implements UserService{
         if(userRepository.existsByEmail(userPostDto.getEmail())) throw new EmailExistsException(userPostDto.getEmail());
 
         User user = userMapper.userPostDtoToUser(userPostDto);
-        addRoles(user, roleTypes);
-        encodePassword(user);
+        userConfigurer.addRoles(user, roleTypes);
+        userConfigurer.encodePassword(user);
+
         userRepository.save(user);
         return userMapper.userToUserGetDto(user);
     }
-
 
     @Override
     @Transactional
@@ -61,8 +58,8 @@ public class UserServiceImpl implements UserService{
         User user = userRepository.findByEmail(userPutDto.getEmail()).orElseThrow(() -> new UserNotFoundException(userPutDto.getEmail()));
 
         userMapper.update(userPutDto, user);
-        if(userPutDto.getPassword() != null) encodePassword(user);
-        addRoles(user, userPutDto.getRoles());
+        if(userPutDto.getPassword() != null) userConfigurer.encodePassword(user);
+        userConfigurer.addRoles(user, userPutDto.getRoles());
         return userMapper.userToUserGetDto(userRepository.save(user));
     }
 
@@ -73,21 +70,6 @@ public class UserServiceImpl implements UserService{
 
         if(!userRepository.existsByEmail(email)) throw new UserNotFoundException(email);
         userRepository.deleteByEmail(email);
-    }
-
-    private void encodePassword(User user){
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-    }
-
-    private void addRoles(User user, List<ApplicationUserRole> roleTypes){
-        if(roleTypes == null || roleTypes.isEmpty()) return;
-
-        user.getRoles().clear();
-        for (ApplicationUserRole roleType : roleTypes) {
-            Role role = roleRepository.findByName(roleType)
-                    .orElseThrow(() -> new IllegalStateException(String.format("The role %s doesn't exist in the database", roleType.name())));
-            user.addRole(role);
-        }
     }
 
     @Autowired
@@ -101,17 +83,12 @@ public class UserServiceImpl implements UserService{
     }
 
     @Autowired
-    public void setPasswordEncoder(PasswordEncoder passwordEncoder) {
-        this.passwordEncoder = passwordEncoder;
-    }
-
-    @Autowired
-    public void setRoleRepository(RoleRepository roleRepository) {
-        this.roleRepository = roleRepository;
-    }
-
-    @Autowired
     public void setInitialAdminConfig(InitialAdminConfiguration initialAdminConfig) {
         this.initialAdminConfig = initialAdminConfig;
+    }
+
+    @Autowired
+    public void setUserConfigurer(UserConfigurer userConfigurer) {
+        this.userConfigurer = userConfigurer;
     }
 }

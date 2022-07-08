@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import rs.ac.bg.fon.njt.fitnessportal.dtos.user.UserGetDto;
 import rs.ac.bg.fon.njt.fitnessportal.dtos.user.UserPostDto;
 import rs.ac.bg.fon.njt.fitnessportal.dtos.user.UserPutDto;
+import rs.ac.bg.fon.njt.fitnessportal.entities.Member;
 import rs.ac.bg.fon.njt.fitnessportal.entities.User;
 import rs.ac.bg.fon.njt.fitnessportal.security.authentication.MyUserDetails;
 
@@ -25,4 +26,7 @@ public interface UserMapper {
 
     @Mapping(target = "username", source = "email")
     MyUserDetails userToMyUserDetails(User user);
+
+    Member userPostDtoToMember(UserPostDto userPostDto);
+
 }

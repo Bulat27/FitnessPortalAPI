@@ -7,6 +7,7 @@ import java.util.Set;
 @Entity(name = "users")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "user_type")
+@DiscriminatorValue("User")
 public class User {
 
     @Id

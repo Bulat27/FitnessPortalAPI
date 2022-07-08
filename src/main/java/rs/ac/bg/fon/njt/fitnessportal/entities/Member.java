@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.util.Set;
 
 @Entity
-@DiscriminatorValue("M")
+@DiscriminatorValue("Member")
 public class Member extends User {
 
     @ManyToMany //TODO: Mozda ces morati da stavis EAGER ako te bude zajebavalo!

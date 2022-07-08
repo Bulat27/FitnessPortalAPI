@@ -11,8 +11,7 @@ import rs.ac.bg.fon.njt.fitnessportal.services.UserService;
 
 import java.util.Arrays;
 
-import static rs.ac.bg.fon.njt.fitnessportal.security.authorization.ApplicationUserRole.ADMIN;
-import static rs.ac.bg.fon.njt.fitnessportal.security.authorization.ApplicationUserRole.USER;
+import static rs.ac.bg.fon.njt.fitnessportal.security.authorization.ApplicationUserRole.*;
 
 @Component
 public class CommandLineAppStartUpRunner implements CommandLineRunner {
@@ -28,9 +27,10 @@ public class CommandLineAppStartUpRunner implements CommandLineRunner {
 
         roleRepository.save(new Role(ADMIN));
         roleRepository.save(new Role(USER));
+        roleRepository.save(new Role(COACH));
 
         UserPostDto adminUser = new UserPostDto(initialAdminConfig.getName(), initialAdminConfig.getLastname(), initialAdminConfig.getEmail(), initialAdminConfig.getPassword());
-        userService.create(adminUser, Arrays.asList(ADMIN, USER));
+        userService.create(adminUser, Arrays.asList(ADMIN));
     }
 
     @Autowired

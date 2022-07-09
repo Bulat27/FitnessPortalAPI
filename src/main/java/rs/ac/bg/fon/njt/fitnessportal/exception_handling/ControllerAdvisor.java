@@ -72,4 +72,9 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
     public ResponseEntity<Object> handleBlogNotFoundException(BlogNotFoundException ex, WebRequest request){
         return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(), HttpStatus.NOT_FOUND, request);
     }
+
+    @ExceptionHandler({InvalidTrainingTimeException.class})
+    public ResponseEntity<Object> handleInvalidTrainingTimeException(InvalidTrainingTimeException ex, WebRequest request){
+        return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+    }
 }

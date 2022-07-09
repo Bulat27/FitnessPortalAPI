@@ -1,42 +1,23 @@
-package rs.ac.bg.fon.njt.fitnessportal.entities;
+package rs.ac.bg.fon.njt.fitnessportal.dtos.training;
 
-import javax.persistence.*;
+import rs.ac.bg.fon.njt.fitnessportal.dtos.coach.CoachGetDto;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.Set;
 
-@Entity(name = "trainings")
-public class Training {
+public class TrainingGetDto {
 
-    @Id
-    @GeneratedValue
     private Integer id;
-
-    @Column(nullable = false)
     private LocalDate date;
-
-    @Column(nullable = false)
     private LocalTime startTime;
-
-    @Column(nullable = false)
     private LocalTime endTime;
-
-    @Column(nullable = false)
     private Integer maxSpots;
-
-    @Column(nullable = false)
     private Integer remainingSpots;
+    private CoachGetDto coach;
 
-    @ManyToOne
-    @JoinColumn(name = "coach_id", nullable = false)
-    private Coach coach;
+    public TrainingGetDto() { }
 
-    @ManyToMany(mappedBy = "trainings")
-    private Set<Member> members; // TODO: Mozda ces morati da instanciras, mada ima logike da ce morati samo na owning strani.
-
-    public Training() { }
-
-    public Training(Integer id, LocalDate date, LocalTime startTime, LocalTime endTime, Integer maxSpots, Integer remainingSpots, Coach coach, Set<Member> members) {
+    public TrainingGetDto(Integer id, LocalDate date, LocalTime startTime, LocalTime endTime, Integer maxSpots, Integer remainingSpots, CoachGetDto coach) {
         this.id = id;
         this.date = date;
         this.startTime = startTime;
@@ -44,7 +25,6 @@ public class Training {
         this.maxSpots = maxSpots;
         this.remainingSpots = remainingSpots;
         this.coach = coach;
-        this.members = members;
     }
 
     public Integer getId() {
@@ -79,11 +59,11 @@ public class Training {
         this.endTime = endTime;
     }
 
-    public Coach getCoach() {
+    public CoachGetDto getCoach() {
         return coach;
     }
 
-    public void setCoach(Coach coach) {
+    public void setCoach(CoachGetDto coach) {
         this.coach = coach;
     }
 
@@ -101,13 +81,5 @@ public class Training {
 
     public void setRemainingSpots(Integer remainingSpots) {
         this.remainingSpots = remainingSpots;
-    }
-
-    public Set<Member> getMembers() {
-        return members;
-    }
-
-    public void setMembers(Set<Member> members) {
-        this.members = members;
     }
 }

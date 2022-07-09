@@ -18,7 +18,8 @@ public class FitnessPortalApplication {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**").exposedHeaders("Authorization");
+                registry.addMapping("/**").exposedHeaders("Authorization")
+                                                    .allowedMethods("DELETE", "POST", "PUT", "PATCH", "GET", "HEAD", "OPTIONS");
             }
         };
     }

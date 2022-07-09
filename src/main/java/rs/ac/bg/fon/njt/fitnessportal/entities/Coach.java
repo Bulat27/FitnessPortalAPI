@@ -1,9 +1,6 @@
 package rs.ac.bg.fon.njt.fitnessportal.entities;
 
-import javax.persistence.CascadeType;
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.util.Set;
 
 @Entity
@@ -13,6 +10,9 @@ public class Coach extends User {
     private Integer yearsOfExperience;
     private String imageSrc;
 
+    @Column(columnDefinition = "TEXT")
+    private String biography;
+
     @OneToMany(mappedBy = "coach", cascade = CascadeType.ALL)
     private Set<Training> trainings; //TODO : Mozda ce morati da se instancira!
 
@@ -20,10 +20,11 @@ public class Coach extends User {
         super();
     }
 
-    public Coach(Integer id, String firstName, String lastName, String email, String password, Integer yearsOfExperience, String imageSrc) {
+    public Coach(Integer id, String firstName, String lastName, String email, String password, Integer yearsOfExperience, String imageSrc, String biography) {
         super(id, firstName, lastName, email, password);
         this.yearsOfExperience = yearsOfExperience;
         this.imageSrc = imageSrc;
+        this.biography = biography;
     }
 
     public Integer getYearsOfExperience() {
@@ -47,6 +48,22 @@ public class Coach extends User {
     }
 
     public void setAppointments(Set<Training> trainings) {
+        this.trainings = trainings;
+    }
+
+    public String getBiography() {
+        return biography;
+    }
+
+    public void setBiography(String biography) {
+        this.biography = biography;
+    }
+
+    public Set<Training> getTrainings() {
+        return trainings;
+    }
+
+    public void setTrainings(Set<Training> trainings) {
         this.trainings = trainings;
     }
 }

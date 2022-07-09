@@ -25,7 +25,7 @@ public class BlogController {
     }
 
     @PostMapping
-    ResponseEntity<BlogGetDto> create(@RequestBody @Valid BlogPostDto blogPostDto, Authentication authentication){
+    public ResponseEntity<BlogGetDto> create(@RequestBody @Valid BlogPostDto blogPostDto, Authentication authentication){
         String userEmail = authentication.getPrincipal().toString();
         return new ResponseEntity<>(blogService.create(blogPostDto, userEmail), HttpStatus.CREATED);
     }

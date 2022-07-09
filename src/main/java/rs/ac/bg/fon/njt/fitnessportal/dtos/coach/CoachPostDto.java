@@ -13,6 +13,9 @@ public class CoachPostDto extends UserPostDto {
     @NotBlank
     private String imageSrc;
 
+    @NotBlank
+    private String biography;
+
     public CoachPostDto() {
         super();
     }
@@ -31,5 +34,13 @@ public class CoachPostDto extends UserPostDto {
 
     public void setImageSrc(String imageSrc) {
         this.imageSrc = imageSrc;
+    }
+
+    public String getBiography() {
+        return biography;
+    }
+
+    public void setBiography(String biography) {
+        this.biography = biography;
     }
 }

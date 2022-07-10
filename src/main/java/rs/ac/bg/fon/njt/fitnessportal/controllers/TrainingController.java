@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import rs.ac.bg.fon.njt.fitnessportal.dtos.training.TrainingGetDto;
 import rs.ac.bg.fon.njt.fitnessportal.dtos.training.TrainingPostDto;
+import rs.ac.bg.fon.njt.fitnessportal.exception_handling.InvalidUserException;
 import rs.ac.bg.fon.njt.fitnessportal.services.TrainingService;
 
 import javax.validation.Valid;
@@ -20,9 +21,18 @@ public class TrainingController {
 
     private TrainingService trainingService;
 
+    @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping("/coach/{coachID}")
     public ResponseEntity<List<TrainingGetDto>> getAvailableByCoach(@PathVariable Integer coachID){
         return ResponseEntity.ok(trainingService.getAvailableByCoachID(coachID));
+    }
+
+    @PreAuthorize("hasRole('ROLE_USER')")
+    @GetMapping("/member/{email}")
+    public ResponseEntity<List<TrainingGetDto>> getByMember(@PathVariable String email, Authentication auth){
+        if(!isLoggedInUser(auth, email)) throw new InvalidUserException();
+
+        return ResponseEntity.ok(trainingService.getByMember(email));
     }
 
     @PreAuthorize("hasRole('ROLE_COACH')")
@@ -40,6 +50,10 @@ public class TrainingController {
         trainingService.scheduleAppointment(trainingID, userEmail);
 
         return ResponseEntity.ok().build();
+    }
+
+    private boolean isLoggedInUser(Authentication auth, String email) {
+        return email != null && email.equals(auth.getPrincipal());
     }
 
     @Autowired

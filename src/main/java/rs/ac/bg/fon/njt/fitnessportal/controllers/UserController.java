@@ -63,7 +63,7 @@ public class UserController {
     }
 
     private boolean isLoggedInUser(Authentication auth, String email){
-        return email.equals(auth.getPrincipal());
+        return email != null && email.equals(auth.getPrincipal());
     }
 
     @Autowired

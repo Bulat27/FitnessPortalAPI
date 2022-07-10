@@ -38,17 +38,6 @@ public class TrainingServiceImpl implements TrainingService {
         return trainingMapper.trainingsToTrainingGetDtos(availableTrainings);
     }
 
-    private List<Training> getAvailableTrainings(List<Training> allTrainings) {
-        List<Training> availableTrainings = new ArrayList<>();
-
-        for (Training t: allTrainings) {
-            if(t.getRemainingSpots() != 0)
-                availableTrainings.add(t);
-        }
-        return availableTrainings;
-    }
-
-
     @Override
     @Transactional
     public TrainingGetDto create(TrainingPostDto trainingPostDto, String userEmail) {
@@ -76,12 +65,30 @@ public class TrainingServiceImpl implements TrainingService {
         if(training.getRemainingSpots() == 0)
             throw new InvalidNumberOfSpotsException("There are no remaining spots on this training, they are all already taken");
 
-        //TODO: Provera da li user ima vec zakazan trening tog datuma
         if(alreadyScheduledOnThatDate(training, member)) throw new AlreadyScheduledException();
 
         training.setRemainingSpots(training.getRemainingSpots() - 1);
 
         member.addTraining(training);
+    }
+
+    @Override
+    public List<TrainingGetDto> getByMember(String userEmail) {
+        Member member = memberRepository.findByEmail(userEmail).orElseThrow(() -> new UserNotFoundException(userEmail));
+
+        List<Training> trainings = new ArrayList<>(member.getTrainings());
+
+        return trainingMapper.trainingsToTrainingGetDtos(trainings);
+    }
+
+    private List<Training> getAvailableTrainings(List<Training> allTrainings) {
+        List<Training> availableTrainings = new ArrayList<>();
+
+        for (Training t: allTrainings) {
+            if(t.getRemainingSpots() != 0)
+                availableTrainings.add(t);
+        }
+        return availableTrainings;
     }
 
     private boolean alreadyScheduledOnThatDate(Training training, Member member) {

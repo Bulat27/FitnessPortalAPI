@@ -32,6 +32,16 @@ public class TrainingController {
         return new ResponseEntity<>(trainingService.create(trainingPostDto, userEmail), HttpStatus.CREATED);
     }
 
+    @PreAuthorize("hasRole('ROLE_USER')")
+    @PostMapping("appointments/{trainingID}")
+    public ResponseEntity<Void> scheduleAppointment(@PathVariable Integer trainingID, Authentication authentication){
+        String userEmail = authentication.getPrincipal().toString();
+
+        trainingService.scheduleAppointment(trainingID, userEmail);
+
+        return ResponseEntity.ok().build();
+    }
+
     @Autowired
     public void setTrainingService(TrainingService trainingService) {
         this.trainingService = trainingService;

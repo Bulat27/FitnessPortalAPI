@@ -82,4 +82,14 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
     public ResponseEntity<Object> handleInvalidNumberOfSpotsException(InvalidNumberOfSpotsException ex, WebRequest request){
         return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
     }
+
+    @ExceptionHandler({TrainingNotFoundException.class})
+    public ResponseEntity<Object> handleTrainingNotFoundException(TrainingNotFoundException ex, WebRequest request){
+        return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(), HttpStatus.NOT_FOUND, request);
+    }
+
+    @ExceptionHandler({AlreadyScheduledException.class})
+    public ResponseEntity<Object> handleAlreadyScheduledException(AlreadyScheduledException ex, WebRequest request){
+        return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+    }
 }

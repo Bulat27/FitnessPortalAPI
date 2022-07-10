@@ -10,4 +10,5 @@ import java.util.List;
 public interface TrainingService {
     TrainingGetDto create(TrainingPostDto trainingPostDto, String userEmail);
     List<TrainingGetDto> getAvailableByCoachID(Integer coachID);
+    void scheduleAppointment(Integer trainingID, String userEmail);
 }

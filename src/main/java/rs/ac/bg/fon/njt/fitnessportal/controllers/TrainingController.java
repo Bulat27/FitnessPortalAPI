@@ -6,20 +6,24 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import rs.ac.bg.fon.njt.fitnessportal.dtos.training.TrainingGetDto;
 import rs.ac.bg.fon.njt.fitnessportal.dtos.training.TrainingPostDto;
 import rs.ac.bg.fon.njt.fitnessportal.services.TrainingService;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @Controller
 @RequestMapping("api/v1/trainings")
 public class TrainingController {
 
     private TrainingService trainingService;
+
+    @GetMapping("/coach/{coachID}")
+    public ResponseEntity<List<TrainingGetDto>> getAvailableByCoach(@PathVariable Integer coachID){
+        return ResponseEntity.ok(trainingService.getAvailableByCoachID(coachID));
+    }
 
     @PreAuthorize("hasRole('ROLE_COACH')")
     @PostMapping

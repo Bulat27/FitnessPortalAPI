@@ -77,4 +77,9 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
     public ResponseEntity<Object> handleInvalidTrainingTimeException(InvalidTrainingTimeException ex, WebRequest request){
         return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
     }
+
+    @ExceptionHandler({InvalidNumberOfSpotsException.class})
+    public ResponseEntity<Object> handleInvalidNumberOfSpotsException(InvalidNumberOfSpotsException ex, WebRequest request){
+        return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+    }
 }

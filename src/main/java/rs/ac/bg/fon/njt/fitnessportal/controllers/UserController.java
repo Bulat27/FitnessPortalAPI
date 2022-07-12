@@ -6,10 +6,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import rs.ac.bg.fon.njt.fitnessportal.dtos.user.UserGetDto;
-import rs.ac.bg.fon.njt.fitnessportal.dtos.user.UserPostDto;
-import rs.ac.bg.fon.njt.fitnessportal.dtos.user.UserProfileGetDto;
-import rs.ac.bg.fon.njt.fitnessportal.dtos.user.UserPutDto;
+import rs.ac.bg.fon.njt.fitnessportal.dtos.user.*;
 import rs.ac.bg.fon.njt.fitnessportal.exception_handling.InvalidUserException;
 import rs.ac.bg.fon.njt.fitnessportal.security.authorization.ApplicationUserRole;
 import rs.ac.bg.fon.njt.fitnessportal.services.UserService;
@@ -55,6 +52,12 @@ public class UserController {
         if(!isAdmin && userPutDto.getRoles() != null) throw new IllegalArgumentException("User cannot update the roles");
 
         return ResponseEntity.ok(userService.update(userPutDto));
+    }
+
+    @PutMapping("/profile/{email}")
+    public ResponseEntity<UserProfileGetDto> updateWithProfile(@PathVariable String email, @RequestBody @Valid ProfilePutDto profilePutDto, Authentication auth){
+        if(!isLoggedInUser(auth, email)) throw new InvalidUserException();
+        return ResponseEntity.ok(userService.updateWithProfile(email, profilePutDto));
     }
 
     @DeleteMapping("/{email}")

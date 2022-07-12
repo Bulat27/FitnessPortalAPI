@@ -3,10 +3,7 @@ package rs.ac.bg.fon.njt.fitnessportal.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import rs.ac.bg.fon.njt.fitnessportal.dtos.user.UserGetDto;
-import rs.ac.bg.fon.njt.fitnessportal.dtos.user.UserPostDto;
-import rs.ac.bg.fon.njt.fitnessportal.dtos.user.UserProfileGetDto;
-import rs.ac.bg.fon.njt.fitnessportal.dtos.user.UserPutDto;
+import rs.ac.bg.fon.njt.fitnessportal.dtos.user.*;
 import rs.ac.bg.fon.njt.fitnessportal.entities.User;
 import rs.ac.bg.fon.njt.fitnessportal.entities.UserProfileInformation;
 import rs.ac.bg.fon.njt.fitnessportal.exception_handling.AdminCannotBeModifiedException;
@@ -78,6 +75,31 @@ public class UserServiceImpl implements UserService{
 
     @Override
     @Transactional
+    public UserProfileGetDto updateWithProfile(String email, ProfilePutDto profilePutDto) {
+        if(email.equals(initialAdminConfig.getEmail())) throw new AdminCannotBeModifiedException();
+
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException(email));
+
+        userMapper.updateWithProfile(profilePutDto, user);
+        if(profilePutDto.getPassword() != null) userConfigurer.encodePassword(user);
+
+        if(user.getUserProfileInformation() == null) {
+            createNewProfileInfo(user, profilePutDto);
+        }else {
+            updateExistingProfileInfo(user, profilePutDto);
+        }
+
+        UserProfileGetDto userProfileGetDto = userMapper.userToUserProfileGetDto(user);
+
+        if(user.getUserProfileInformation() != null) fillProfileInfo(userProfileGetDto, user.getUserProfileInformation());
+
+        userRepository.save(user);
+
+        return userProfileGetDto;
+    }
+
+    @Override
+    @Transactional
     public void delete(String email) {
         if(email.equals(initialAdminConfig.getEmail())) throw new AdminCannotBeModifiedException();
 
@@ -90,6 +112,22 @@ public class UserServiceImpl implements UserService{
         userProfileGetDto.setGender(userProfileInformation.getGender());
         userProfileGetDto.setHeight(userProfileInformation.getHeight());
         userProfileGetDto.setWeight(userProfileInformation.getWeight());
+    }
+
+    private void updateExistingProfileInfo(User user, ProfilePutDto profilePutDto) {
+        UserProfileInformation profileInfo = user.getUserProfileInformation();
+
+        if (profilePutDto.getHeight() != null) profileInfo.setHeight(profilePutDto.getHeight());
+        if (profilePutDto.getWeight() != null) profileInfo.setWeight(profilePutDto.getWeight());
+        if (profilePutDto.getAge() != null) profileInfo.setAge(profilePutDto.getAge());
+        if (profilePutDto.getGender() != null) profileInfo.setGender(profilePutDto.getGender());
+    }
+
+    private void createNewProfileInfo(User user, ProfilePutDto profilePutDto) {
+        UserProfileInformation profileInfo =
+                new UserProfileInformation(profilePutDto.getHeight(), profilePutDto.getWeight(), profilePutDto.getAge(), profilePutDto.getGender());
+
+        profileInfo.setUser(user);
     }
 
     @Autowired

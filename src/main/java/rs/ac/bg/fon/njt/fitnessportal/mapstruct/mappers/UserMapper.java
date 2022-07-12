@@ -5,10 +5,7 @@ import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.springframework.stereotype.Component;
-import rs.ac.bg.fon.njt.fitnessportal.dtos.user.UserGetDto;
-import rs.ac.bg.fon.njt.fitnessportal.dtos.user.UserPostDto;
-import rs.ac.bg.fon.njt.fitnessportal.dtos.user.UserProfileGetDto;
-import rs.ac.bg.fon.njt.fitnessportal.dtos.user.UserPutDto;
+import rs.ac.bg.fon.njt.fitnessportal.dtos.user.*;
 import rs.ac.bg.fon.njt.fitnessportal.entities.Member;
 import rs.ac.bg.fon.njt.fitnessportal.entities.User;
 import rs.ac.bg.fon.njt.fitnessportal.security.authentication.MyUserDetails;
@@ -25,6 +22,8 @@ public interface UserMapper {
 
     @Mapping(target = "roles", ignore = true)
     void update(UserPutDto userPutDto, @MappingTarget User user);
+
+    void updateWithProfile(ProfilePutDto profilePutDto, @MappingTarget User user);
 
     @Mapping(target = "username", source = "email")
     MyUserDetails userToMyUserDetails(User user);

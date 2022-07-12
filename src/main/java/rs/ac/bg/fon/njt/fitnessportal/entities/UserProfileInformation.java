@@ -8,17 +8,10 @@ public class UserProfileInformation {
     @Id
     @GeneratedValue
     private Integer id;
-
-    @Column(nullable = false)
     private Integer height;
 
-    @Column(nullable = false)
     private Integer weight;
-
-    @Column(nullable = false)
     private Integer age;
-
-    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
@@ -28,6 +21,12 @@ public class UserProfileInformation {
 
     public UserProfileInformation() { }
 
+    public UserProfileInformation(Integer height, Integer weight, Integer age, Gender gender) {
+        this.height = height;
+        this.weight = weight;
+        this.age = age;
+        this.gender = gender;
+    }
     public UserProfileInformation(Integer id, Integer height, Integer weight, Integer age, Gender gender, User user) {
         this.id = id;
         this.height = height;

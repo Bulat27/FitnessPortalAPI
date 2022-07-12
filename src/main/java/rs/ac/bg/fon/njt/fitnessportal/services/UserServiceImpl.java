@@ -5,8 +5,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import rs.ac.bg.fon.njt.fitnessportal.dtos.user.UserGetDto;
 import rs.ac.bg.fon.njt.fitnessportal.dtos.user.UserPostDto;
+import rs.ac.bg.fon.njt.fitnessportal.dtos.user.UserProfileGetDto;
 import rs.ac.bg.fon.njt.fitnessportal.dtos.user.UserPutDto;
 import rs.ac.bg.fon.njt.fitnessportal.entities.User;
+import rs.ac.bg.fon.njt.fitnessportal.entities.UserProfileInformation;
 import rs.ac.bg.fon.njt.fitnessportal.exception_handling.AdminCannotBeModifiedException;
 import rs.ac.bg.fon.njt.fitnessportal.exception_handling.EmailExistsException;
 import rs.ac.bg.fon.njt.fitnessportal.exception_handling.UserNotFoundException;
@@ -35,6 +37,17 @@ public class UserServiceImpl implements UserService{
     public UserGetDto get(String email) {
         User user = userRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException(email));
         return userMapper.userToUserGetDto(user);
+    }
+
+    @Override
+    public UserProfileGetDto getWithProfile(String email) {
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException(email));
+
+        UserProfileGetDto userProfileGetDto = userMapper.userToUserProfileGetDto(user);
+
+        if(user.getUserProfileInformation() != null) fillProfileInfo(userProfileGetDto, user.getUserProfileInformation());
+
+        return userProfileGetDto;
     }
 
     @Override
@@ -70,6 +83,13 @@ public class UserServiceImpl implements UserService{
 
         if(!userRepository.existsByEmail(email)) throw new UserNotFoundException(email);
         userRepository.deleteByEmail(email);
+    }
+
+    private void fillProfileInfo(UserProfileGetDto userProfileGetDto, UserProfileInformation userProfileInformation) {
+        userProfileGetDto.setAge(userProfileInformation.getAge());
+        userProfileGetDto.setGender(userProfileInformation.getGender());
+        userProfileGetDto.setHeight(userProfileInformation.getHeight());
+        userProfileGetDto.setWeight(userProfileInformation.getWeight());
     }
 
     @Autowired

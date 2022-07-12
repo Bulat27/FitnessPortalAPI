@@ -35,6 +35,9 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private Set<Blog> blogs;
 
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private UserProfileInformation userProfileInformation;
+
     public User() { }
 
     public User(Integer id, String firstName, String lastName, String email, String password) {
@@ -95,5 +98,12 @@ public class User {
 
     public void addRole(Role role){
         roles.add(role);
+    }
+
+    public UserProfileInformation getUserProfileInformation() {
+        return userProfileInformation;
+    }
+    public void setUserProfileInformation(UserProfileInformation userProfileInformation) {
+        this.userProfileInformation = userProfileInformation;
     }
 }

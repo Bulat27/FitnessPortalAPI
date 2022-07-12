@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import rs.ac.bg.fon.njt.fitnessportal.dtos.user.UserGetDto;
 import rs.ac.bg.fon.njt.fitnessportal.dtos.user.UserPostDto;
+import rs.ac.bg.fon.njt.fitnessportal.dtos.user.UserProfileGetDto;
 import rs.ac.bg.fon.njt.fitnessportal.dtos.user.UserPutDto;
 import rs.ac.bg.fon.njt.fitnessportal.exception_handling.InvalidUserException;
 import rs.ac.bg.fon.njt.fitnessportal.security.authorization.ApplicationUserRole;
@@ -32,6 +33,12 @@ public class UserController {
     public ResponseEntity<UserGetDto> get(@PathVariable String email, Authentication auth) {
         if(!isAdmin(auth) && !isLoggedInUser(auth, email)) throw new InvalidUserException();
         return ResponseEntity.ok(userService.get(email));
+    }
+
+    @GetMapping("/profile/{email}")
+    public ResponseEntity<UserProfileGetDto> getWithProfile(@PathVariable String email, Authentication auth){
+        if(!isLoggedInUser(auth, email)) throw new InvalidUserException();
+        return ResponseEntity.ok(userService.getWithProfile(email));
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")

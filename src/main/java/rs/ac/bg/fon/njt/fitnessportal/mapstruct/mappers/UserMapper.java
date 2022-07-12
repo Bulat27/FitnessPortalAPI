@@ -7,6 +7,7 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.springframework.stereotype.Component;
 import rs.ac.bg.fon.njt.fitnessportal.dtos.user.UserGetDto;
 import rs.ac.bg.fon.njt.fitnessportal.dtos.user.UserPostDto;
+import rs.ac.bg.fon.njt.fitnessportal.dtos.user.UserProfileGetDto;
 import rs.ac.bg.fon.njt.fitnessportal.dtos.user.UserPutDto;
 import rs.ac.bg.fon.njt.fitnessportal.entities.Member;
 import rs.ac.bg.fon.njt.fitnessportal.entities.User;
@@ -18,6 +19,7 @@ import java.util.List;
 @Mapper(componentModel = "spring", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface UserMapper {
     UserGetDto userToUserGetDto(User user);
+    UserProfileGetDto userToUserProfileGetDto(User user);
     User userPostDtoToUser(UserPostDto userPostDto);
     List<UserGetDto> usersToUserGetDtos(List<User> users);
 

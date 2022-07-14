@@ -36,6 +36,7 @@ public class CoachServiceImpl implements CoachService {
         Coach coach = coachMapper.coachPostDtoToCoach(coachPostDto);
         userConfigurer.addRoles(coach, roleTypes);
         userConfigurer.encodePassword(coach);
+        coach.setEnabled(true);
 
         coachRepository.save(coach);
         return coachMapper.coachToCoachGetDto(coach);

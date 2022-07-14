@@ -70,7 +70,7 @@ public class MemberServiceImpl implements MemberService{
         helper.setTo(toAddress);
         helper.setSubject(subject);
 
-        content = content.replace("[[name]]", user.getFirstName() + user.getLastName());
+        content = content.replace("[[name]]", user.getFirstName() + " " + user.getLastName());
         String verifyURL = siteURL + "/api/v1/members/verify?code=" + user.getVerificationCode();
 
         content = content.replace("[[URL]]", verifyURL);

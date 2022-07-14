@@ -2,13 +2,22 @@ package rs.ac.bg.fon.njt.fitnessportal.dtos.user;
 
 import rs.ac.bg.fon.njt.fitnessportal.entities.Gender;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+
 public class ProfilePutDto {
 
     private String firstName;
     private String lastName;
     private String password;
+    @Max(250)
+    @Min(100)
     private Integer height;
+    @Max(300)
+    @Min(20)
     private Integer weight;
+    @Max(100)
+    @Min(5)
     private Integer age;
     private Gender gender;
 

@@ -45,7 +45,7 @@ public class TrainingServiceImpl implements TrainingService {
 
         validateTrainingDateTime(trainingPostDto, coach);
 
-        if(trainingPostDto.getMaxSpots() < 0)
+        if(trainingPostDto.getMaxSpots() <= 0)
             throw new InvalidNumberOfSpotsException("Maximum number of spots has to be a positive integer");
 
         Training training = trainingMapper.trainingPostDtoToTraining(trainingPostDto);
@@ -103,6 +103,9 @@ public class TrainingServiceImpl implements TrainingService {
 
         if(trainingPostDto.getEndTime().minusMinutes(30).isBefore(trainingPostDto.getStartTime()))
             message += "Start time must be at least 30 minutes before the end time\n";
+
+        if(trainingPostDto.getStartTime().plusMinutes(120).isBefore(trainingPostDto.getEndTime()))
+            message += "Maximum training length is 2 hours\n";
 
         if(trainingPostDto.getDate().isBefore(LocalDate.now()))
             message += "Training date must be after the current date\n";

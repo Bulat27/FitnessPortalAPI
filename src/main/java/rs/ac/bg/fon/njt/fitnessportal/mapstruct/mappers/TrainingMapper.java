@@ -4,6 +4,7 @@ import org.mapstruct.Mapper;
 import org.springframework.stereotype.Component;
 import rs.ac.bg.fon.njt.fitnessportal.dtos.training.TrainingGetDto;
 import rs.ac.bg.fon.njt.fitnessportal.dtos.training.TrainingPostDto;
+import rs.ac.bg.fon.njt.fitnessportal.dtos.training.TrainingWithoutCoachGetDto;
 import rs.ac.bg.fon.njt.fitnessportal.entities.Training;
 
 import java.util.List;
@@ -14,4 +15,6 @@ public interface TrainingMapper {
     TrainingGetDto trainingToTrainingGetDto(Training training);
     Training trainingPostDtoToTraining(TrainingPostDto trainingPostDto);
     List<TrainingGetDto> trainingsToTrainingGetDtos(List<Training> trainings);
+    TrainingWithoutCoachGetDto trainingToTrainingWithoutCoachGetDto(Training training);
+    List<TrainingWithoutCoachGetDto> trainingsToTrainingWithoutCoachGetDtos(List<Training> trainings);
 }

@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import rs.ac.bg.fon.njt.fitnessportal.dtos.training.TrainingGetDto;
 import rs.ac.bg.fon.njt.fitnessportal.dtos.training.TrainingPostDto;
+import rs.ac.bg.fon.njt.fitnessportal.dtos.training.TrainingWithoutCoachGetDto;
 import rs.ac.bg.fon.njt.fitnessportal.entities.Coach;
 import rs.ac.bg.fon.njt.fitnessportal.entities.Member;
 import rs.ac.bg.fon.njt.fitnessportal.entities.Training;
@@ -79,6 +80,15 @@ public class TrainingServiceImpl implements TrainingService {
         List<Training> trainings = new ArrayList<>(member.getTrainings());
 
         return trainingMapper.trainingsToTrainingGetDtos(trainings);
+    }
+
+    @Override
+    public List<TrainingWithoutCoachGetDto> getByCoach(String coachEmail) {
+        Coach coach = coachRepository.findByEmail(coachEmail).orElseThrow(() -> new UserNotFoundException(coachEmail));
+
+        List<Training> trainings = new ArrayList<>(coach.getTrainings());
+
+        return trainingMapper.trainingsToTrainingWithoutCoachGetDtos(trainings);
     }
 
     private List<Training> getAvailableTrainings(List<Training> allTrainings) {

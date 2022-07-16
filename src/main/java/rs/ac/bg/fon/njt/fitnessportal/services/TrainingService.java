@@ -3,6 +3,7 @@ package rs.ac.bg.fon.njt.fitnessportal.services;
 import org.springframework.stereotype.Service;
 import rs.ac.bg.fon.njt.fitnessportal.dtos.training.TrainingGetDto;
 import rs.ac.bg.fon.njt.fitnessportal.dtos.training.TrainingPostDto;
+import rs.ac.bg.fon.njt.fitnessportal.dtos.training.TrainingWithoutCoachGetDto;
 
 import java.util.List;
 
@@ -12,4 +13,6 @@ public interface TrainingService {
     List<TrainingGetDto> getAvailableByCoachID(Integer coachID);
     void scheduleAppointment(Integer trainingID, String userEmail);
     List<TrainingGetDto> getByMember(String userEmail);
+
+    List<TrainingWithoutCoachGetDto> getByCoach(String coachEmail);
 }

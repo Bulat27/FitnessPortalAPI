@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import rs.ac.bg.fon.njt.fitnessportal.dtos.training.TrainingGetDto;
 import rs.ac.bg.fon.njt.fitnessportal.dtos.training.TrainingPostDto;
+import rs.ac.bg.fon.njt.fitnessportal.dtos.training.TrainingWithoutCoachGetDto;
 import rs.ac.bg.fon.njt.fitnessportal.exception_handling.InvalidUserException;
 import rs.ac.bg.fon.njt.fitnessportal.services.TrainingService;
 
@@ -21,8 +22,16 @@ public class TrainingController {
 
     private TrainingService trainingService;
 
+    @PreAuthorize("hasRole('ROLE_COACH')")
+    @GetMapping("/coach/{email}")
+    public ResponseEntity<List<TrainingWithoutCoachGetDto>> getByCoach(@PathVariable String email, Authentication auth){
+        if(!isLoggedInUser(auth, email)) throw new InvalidUserException();
+
+        return ResponseEntity.ok(trainingService.getByCoach(email));
+    }
+
     @PreAuthorize("hasRole('ROLE_USER')")
-    @GetMapping("/coach/{coachID}")
+    @GetMapping("/coach/available/{coachID}")
     public ResponseEntity<List<TrainingGetDto>> getAvailableByCoach(@PathVariable Integer coachID){
         return ResponseEntity.ok(trainingService.getAvailableByCoachID(coachID));
     }

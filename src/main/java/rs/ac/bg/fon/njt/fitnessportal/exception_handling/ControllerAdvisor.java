@@ -98,4 +98,14 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
     public ResponseEntity<Object> handleAccountVerificationFailedException(AccountVerificationFailedException ex, WebRequest request){
         return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
     }
+
+    @ExceptionHandler({AppointmentNotFoundException.class})
+    public ResponseEntity<Object> handleAppointmentNotFoundException(AppointmentNotFoundException ex, WebRequest request){
+        return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(), HttpStatus.NOT_FOUND, request);
+    }
+
+    @ExceptionHandler({FutureAppointmentException.class})
+    public ResponseEntity<Object> handleFutureAppointmentException(FutureAppointmentException ex, WebRequest request){
+        return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+    }
 }

@@ -5,15 +5,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+import rs.ac.bg.fon.njt.fitnessportal.dtos.appointment.AppointmentAttendancePutDto;
 import rs.ac.bg.fon.njt.fitnessportal.dtos.appointment.AppointmentWithMemberGetDto;
 import rs.ac.bg.fon.njt.fitnessportal.dtos.appointment.AppointmentWithTrainingGetDto;
 import rs.ac.bg.fon.njt.fitnessportal.exception_handling.InvalidUserException;
 import rs.ac.bg.fon.njt.fitnessportal.services.AppointmentService;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Controller
@@ -46,6 +45,15 @@ public class AppointmentController {
         appointmentService.scheduleAppointment(trainingID, userEmail);
 
         return ResponseEntity.ok().build();
+    }
+
+    @PreAuthorize("hasRole('ROLE_COACH')")
+    @PutMapping("/attendance/{appointmentID}")
+    public ResponseEntity<AppointmentWithMemberGetDto> updateAttendance(@PathVariable Integer appointmentID,
+                                                                        @RequestBody @Valid AppointmentAttendancePutDto appointmentAttendancePutDto, Authentication auth){
+        String userEmail = auth.getPrincipal().toString();
+
+        return ResponseEntity.ok(appointmentService.updateAttendance(appointmentID, appointmentAttendancePutDto, userEmail));
     }
 
     private boolean isLoggedInUser(Authentication auth, String email) {

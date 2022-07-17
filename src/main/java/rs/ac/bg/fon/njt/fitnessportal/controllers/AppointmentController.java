@@ -9,7 +9,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import rs.ac.bg.fon.njt.fitnessportal.dtos.appointment.AppointmentGetDto;
+import rs.ac.bg.fon.njt.fitnessportal.dtos.appointment.AppointmentWithMemberGetDto;
+import rs.ac.bg.fon.njt.fitnessportal.dtos.appointment.AppointmentWithTrainingGetDto;
 import rs.ac.bg.fon.njt.fitnessportal.exception_handling.InvalidUserException;
 import rs.ac.bg.fon.njt.fitnessportal.services.AppointmentService;
 
@@ -23,16 +24,24 @@ public class AppointmentController {
 
     @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping("/member/{email}")
-    public ResponseEntity<List<AppointmentGetDto>> getByMember(@PathVariable String email, Authentication auth){
+    public ResponseEntity<List<AppointmentWithTrainingGetDto>> getByMember(@PathVariable String email, Authentication auth){
         if(!isLoggedInUser(auth, email)) throw new InvalidUserException();
 
         return ResponseEntity.ok(appointmentService.getByMember(email));
     }
 
+    @PreAuthorize("hasRole('ROLE_COACH')")
+    @GetMapping("/training/{trainingID}")
+    public ResponseEntity<List<AppointmentWithMemberGetDto>> getByTraining(@PathVariable Integer trainingID, Authentication auth){
+        String userEmail = auth.getPrincipal().toString();
+
+        return ResponseEntity.ok(appointmentService.getByTraining(trainingID, userEmail));
+    }
+
     @PreAuthorize("hasRole('ROLE_USER')")
     @PostMapping("/{trainingID}")
-    public ResponseEntity<Void> scheduleAppointment(@PathVariable Integer trainingID, Authentication authentication){
-        String userEmail = authentication.getPrincipal().toString();
+    public ResponseEntity<Void> scheduleAppointment(@PathVariable Integer trainingID, Authentication auth){
+        String userEmail = auth.getPrincipal().toString();
 
         appointmentService.scheduleAppointment(trainingID, userEmail);
 

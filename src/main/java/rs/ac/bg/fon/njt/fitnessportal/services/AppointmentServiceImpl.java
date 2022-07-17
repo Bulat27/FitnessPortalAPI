@@ -3,15 +3,12 @@ package rs.ac.bg.fon.njt.fitnessportal.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import rs.ac.bg.fon.njt.fitnessportal.dtos.appointment.AppointmentGetDto;
-import rs.ac.bg.fon.njt.fitnessportal.dtos.training.TrainingGetDto;
+import rs.ac.bg.fon.njt.fitnessportal.dtos.appointment.AppointmentWithMemberGetDto;
+import rs.ac.bg.fon.njt.fitnessportal.dtos.appointment.AppointmentWithTrainingGetDto;
 import rs.ac.bg.fon.njt.fitnessportal.entities.Appointment;
 import rs.ac.bg.fon.njt.fitnessportal.entities.Member;
 import rs.ac.bg.fon.njt.fitnessportal.entities.Training;
-import rs.ac.bg.fon.njt.fitnessportal.exception_handling.AlreadyScheduledException;
-import rs.ac.bg.fon.njt.fitnessportal.exception_handling.InvalidNumberOfSpotsException;
-import rs.ac.bg.fon.njt.fitnessportal.exception_handling.TrainingNotFoundException;
-import rs.ac.bg.fon.njt.fitnessportal.exception_handling.UserNotFoundException;
+import rs.ac.bg.fon.njt.fitnessportal.exception_handling.*;
 import rs.ac.bg.fon.njt.fitnessportal.mapstruct.mappers.AppointmentMapper;
 import rs.ac.bg.fon.njt.fitnessportal.repositories.AppointmentRepository;
 import rs.ac.bg.fon.njt.fitnessportal.repositories.MemberRepository;
@@ -30,12 +27,23 @@ public class AppointmentServiceImpl implements AppointmentService{
 
 
     @Override
-    public List<AppointmentGetDto> getByMember(String memberEmail) {
+    public List<AppointmentWithTrainingGetDto> getByMember(String memberEmail) {
         Member member = memberRepository.findByEmail(memberEmail).orElseThrow(() -> new UserNotFoundException(memberEmail));
 
         List<Appointment> appointments = new ArrayList<>(member.getAppointments());
 
-        return appointmentMapper.appointmentsToAppointmentGetDtos(appointments);
+        return appointmentMapper.appointmentsToAppointmentWithTrainingGetDtos(appointments);
+    }
+
+    @Override
+    public List<AppointmentWithMemberGetDto> getByTraining(Integer trainingID, String coachEmail) {
+        Training training = trainingRepository.findById(trainingID).orElseThrow(() -> new TrainingNotFoundException(trainingID));
+
+        if(!training.getCoach().getEmail().equals(coachEmail)) throw new InvalidUserException();
+
+        List<Appointment> appointments = new ArrayList<>(training.getAppointments());
+
+        return appointmentMapper.appointmentsToAppointmentWithMemberGetDtos(appointments);
     }
 
     @Override
@@ -56,6 +64,8 @@ public class AppointmentServiceImpl implements AppointmentService{
 
         appointmentRepository.save(appointment);
     }
+
+
 
 //    @Override
 //    @Transactional

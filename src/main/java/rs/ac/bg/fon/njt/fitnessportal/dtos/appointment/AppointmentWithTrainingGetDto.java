@@ -2,15 +2,15 @@ package rs.ac.bg.fon.njt.fitnessportal.dtos.appointment;
 
 import rs.ac.bg.fon.njt.fitnessportal.dtos.training.TrainingGetDto;
 
-public class AppointmentGetDto {
+public class AppointmentWithTrainingGetDto {
 
     private Integer id;
     private Boolean attended;
     private TrainingGetDto training;
 
-    public AppointmentGetDto() { }
+    public AppointmentWithTrainingGetDto() { }
 
-    public AppointmentGetDto(Integer id, Boolean attended, TrainingGetDto training) {
+    public AppointmentWithTrainingGetDto(Integer id, Boolean attended, TrainingGetDto training) {
         this.id = id;
         this.attended = attended;
         this.training = training;

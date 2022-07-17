@@ -36,29 +36,11 @@ public class TrainingController {
         return ResponseEntity.ok(trainingService.getAvailableByCoachID(coachID));
     }
 
-    @PreAuthorize("hasRole('ROLE_USER')")
-    @GetMapping("/member/{email}")
-    public ResponseEntity<List<TrainingGetDto>> getByMember(@PathVariable String email, Authentication auth){
-        if(!isLoggedInUser(auth, email)) throw new InvalidUserException();
-
-        return ResponseEntity.ok(trainingService.getByMember(email));
-    }
-
     @PreAuthorize("hasRole('ROLE_COACH')")
     @PostMapping
     public ResponseEntity<TrainingGetDto> create(@RequestBody @Valid TrainingPostDto trainingPostDto, Authentication authentication){
         String userEmail = authentication.getPrincipal().toString();
         return new ResponseEntity<>(trainingService.create(trainingPostDto, userEmail), HttpStatus.CREATED);
-    }
-
-    @PreAuthorize("hasRole('ROLE_USER')")
-    @PostMapping("appointments/{trainingID}")
-    public ResponseEntity<Void> scheduleAppointment(@PathVariable Integer trainingID, Authentication authentication){
-        String userEmail = authentication.getPrincipal().toString();
-
-        trainingService.scheduleAppointment(trainingID, userEmail);
-
-        return ResponseEntity.ok().build();
     }
 
     private boolean isLoggedInUser(Authentication auth, String email) {

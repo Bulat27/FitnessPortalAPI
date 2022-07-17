@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import rs.ac.bg.fon.njt.fitnessportal.dtos.training.TrainingGetDto;
 import rs.ac.bg.fon.njt.fitnessportal.dtos.training.TrainingPostDto;
 import rs.ac.bg.fon.njt.fitnessportal.dtos.training.TrainingWithoutCoachGetDto;
+import rs.ac.bg.fon.njt.fitnessportal.entities.Appointment;
 import rs.ac.bg.fon.njt.fitnessportal.entities.Coach;
 import rs.ac.bg.fon.njt.fitnessportal.entities.Member;
 import rs.ac.bg.fon.njt.fitnessportal.entities.Training;
@@ -57,32 +58,6 @@ public class TrainingServiceImpl implements TrainingService {
     }
 
     @Override
-    @Transactional
-    public void scheduleAppointment(Integer trainingID, String userEmail) {
-        Member member = memberRepository.findByEmail(userEmail).orElseThrow(() -> new UserNotFoundException(userEmail));
-
-        Training training = trainingRepository.findById(trainingID).orElseThrow(() -> new TrainingNotFoundException(trainingID));
-
-        if(training.getRemainingSpots() == 0)
-            throw new InvalidNumberOfSpotsException("There are no remaining spots on this training, they are all already taken");
-
-        if(alreadyScheduledOnThatDate(training, member)) throw new AlreadyScheduledException();
-
-        training.setRemainingSpots(training.getRemainingSpots() - 1);
-
-        member.addTraining(training);
-    }
-
-    @Override
-    public List<TrainingGetDto> getByMember(String userEmail) {
-        Member member = memberRepository.findByEmail(userEmail).orElseThrow(() -> new UserNotFoundException(userEmail));
-
-        List<Training> trainings = new ArrayList<>(member.getTrainings());
-
-        return trainingMapper.trainingsToTrainingGetDtos(trainings);
-    }
-
-    @Override
     public List<TrainingWithoutCoachGetDto> getByCoach(String coachEmail) {
         Coach coach = coachRepository.findByEmail(coachEmail).orElseThrow(() -> new UserNotFoundException(coachEmail));
 
@@ -99,13 +74,6 @@ public class TrainingServiceImpl implements TrainingService {
                 availableTrainings.add(t);
         }
         return availableTrainings;
-    }
-
-    private boolean alreadyScheduledOnThatDate(Training training, Member member) {
-        for (Training t: member.getTrainings()) {
-            if(t.getDate().equals(training.getDate())) return true;
-        }
-        return false;
     }
 
     private void validateTrainingDateTime(TrainingPostDto trainingPostDto, Coach coach){
